@@ -4,6 +4,8 @@ from fastapi.templating import Jinja2Templates
 from datetime import datetime
 from contextlib import closing
 
+from models.schemas import registrar_gasto
+
 import database
 
 motivos = [item for lista in database.grupos.values() for item in lista]
@@ -26,18 +28,20 @@ async def home(request: Request):
 async def registrar(
     fecha_hora : str = Form(...),
     tipo : str = Form(...),
-    motivo : str = Form(...),
+    categoria : str = Form(...),
     monto : float = Form(...),
     descripcion : str = Form ("")
     ):
+    movimiento = registrar_gasto(fecha_hora=fecha_hora,tipo=tipo,categoria=categoria,monto=monto,descripcion=descripcion)
+
     database.init_db()
     with closing(database.get_db()) as db:
         db.execute(
             "INSERT INTO datos VALUES (?, ?, ?, ?, ?)",
-            (fecha_hora, tipo, motivo, monto, descripcion)
+            (movimiento.fecha_hora, movimiento.tipo, movimiento.categoria, movimiento.monto, movimiento.descripcion)
         )
         db.commit()
 
-    print(f"Recibido: {fecha_hora}, {tipo}, {motivo}, {monto}, {descripcion}")
+    print(f"Recibido: {movimiento.fecha_hora}, {movimiento.tipo}, {movimiento.categoria}, {movimiento.monto}, {movimiento.descripcion}")
     return RedirectResponse(url="/gastos/", status_code=303)
 
