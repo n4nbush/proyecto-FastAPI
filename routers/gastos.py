@@ -6,8 +6,7 @@ from contextlib import closing
 
 import database
 
-motivos = ["Moto","Auto","Uber"]
-
+motivos = [item for lista in database.grupos.values() for item in lista]
 
 router = APIRouter(
     prefix='/gastos',
