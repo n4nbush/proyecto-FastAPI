@@ -1,19 +1,11 @@
 import sqlite3
 from contextlib import closing
 from datetime import datetime
+from utils.constant import grupos
 
 DATABASE = 'database/database.db'
 
-grupos={
-    "🧾 Finanzas y Deudas":["Deuda Viejo","Tarjeta Visa","Tarjeta Master","Deuda Banco"],
-    "🛒 Consumo y Vida Diaria":["Gastos Hormiga", "Comida Trabajo","Almacén"],
-    "🏠 Hogar y Servicios":["Internet","Celular","Ferretería","Luz","Servicios Digitales"],
-    "👨‍👩‍👦 Familia":["Niñera","Boris","Agustina"],
-    "🧍‍♂️ Bienestar y Personales":["Gustos","Ropa","GIM","Farmacia","Psicóloga","Peluquería","Indoor"],
-    "🚗 Transporte y Movilidad":["Uber","Moto","Clio","SUBE"],
-    "Otros Gastos":["Otros Gastos"],
-    "Ingresos":["Salario","Inversiones","Regalo","Reembolso","Otros Ingresos"]
-}
+
 
 def init_db():
     """Crea la tabla si no existe"""
@@ -87,3 +79,5 @@ def filtrar(dias=30,categoria_select=None,grupo_select=None):
         total += monto
         resultado.append([fecha,tipo,grupo,categoria,monto,descripcion])
     return(resultado,total)
+
+

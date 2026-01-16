@@ -3,6 +3,7 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from datetime import datetime
 from contextlib import closing
+from utils.helpers import backup
 
 from models.schemas import registrar_gasto
 
@@ -19,6 +20,9 @@ templates = Jinja2Templates(directory='templates')
 
 @router.get("/", response_class=HTMLResponse)
 async def home(request: Request):
+
+    backup()
+
     return templates.TemplateResponse(
         name="index.html",
         context={"request":request, "motivos":motivos}

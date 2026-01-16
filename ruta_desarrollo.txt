@@ -4,7 +4,7 @@ FASE 1: Preparación
 
 FASE 2: Datos
 ├─ [✅] Crear modelos Pydantic
-├─ [ ] Migrar grupos/categorías a constants.py
+├─ [✅] Migrar grupos/categorías a constants.py
 
 FASE 3: Funciones
 ├─ [ ] Migrar filtrar() a database.py
