@@ -1,15 +1,13 @@
-from fastapi import APIRouter, Request, Form
+from fastapi import APIRouter, Request, Form, Depends
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from datetime import datetime
 from contextlib import closing
 from utils.helpers import backup
-
-from models.schemas import registrar_gasto
-
+from models.schemas import registrar_gasto, filtrar
+from utils.constant import grupos,categorias
 import database
 
-motivos = [item for lista in database.grupos.values() for item in lista]
 
 router = APIRouter(
     prefix='/gastos',
@@ -25,7 +23,7 @@ async def home(request: Request):
 
     return templates.TemplateResponse(
         name="index.html",
-        context={"request":request, "motivos":motivos}
+        context={"request":request, "categorias":categorias}
         )
 
 @router.post("/registrar")
@@ -48,4 +46,24 @@ async def registrar(
 
     print(f"Recibido: {movimiento.fecha_hora}, {movimiento.tipo}, {movimiento.categoria}, {movimiento.monto}, {movimiento.descripcion}")
     return RedirectResponse(url="/gastos/", status_code=303)
+
+@router.get("/movimientos", response_class=HTMLResponse)
+async def movimientos(request: Request,filtros: filtrar = Depends()):
+    resultados,total = database.filtrar(
+        filtros.filtro_fecha, 
+        grupo_select=filtros.grupo, 
+        categoria_select=filtros.categoria)
+
+    return templates.TemplateResponse(
+        name="movimientos.html",
+        context={"request":request, "categorias":categorias,"grupos":grupos, "resultados":resultados,"total":total}
+    )
+
+@router.get("/resumen_grupos", response_class=HTMLResponse)
+async def resumen_grupos(request: Request):
+
+    return templates.TemplateResponse(
+        name='resumen_grupos.html',
+        context={"request":request}
+    )
 

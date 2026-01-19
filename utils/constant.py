@@ -8,3 +8,5 @@ grupos={
     "Otros Gastos":["Otros Gastos"],
     "Ingresos":["Salario","Inversiones","Regalo","Reembolso","Otros Ingresos"]
 }
+
+categorias = [item for lista in grupos.values() for item in lista]

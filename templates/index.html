@@ -7,7 +7,12 @@
 </head>
 <body>
 
-    <button onclick="window.location.href='/movimientos'">Ver Movimientos</button>
+    <button onclick="resumenes()" id="boton_resumenes">Menu▼</button>
+    <div id="menu" class="oculto">
+        <button onclick="window.location.href='/gastos/movimientos'">Ver Movimientos</button>
+        <button onclick="window.location.href='/gastos/resumen_grupos'">Resumen por grupos</button>
+        <button>Resumen por grupos</button>
+    </div>
 
     <h1>💰 Registrar Movimiento</h1>
 
@@ -28,11 +33,13 @@
             </select>
         </div>
 
+        
+
         <div class="form-group">
             <label for="cateogira">Motivo:</label>
             <select id="categoria" name="categoria" required>
                 <option value="">Selecciona un motivo</option>
-                {% for item in motivos%}
+                {% for item in categorias%}
                 <option value="{{item}}">{{item}}</option>
                 {%endfor%}
             </select>
@@ -47,7 +54,7 @@
             <label for="descripcion">Descripción (opcional):</label>
             <textarea id="descripcion" name="descripcion" rows="3" placeholder="Detalles adicionales..."></textarea>
         </div>
-
+        
         <button type="submit">💾 Guardar Movimiento</button>
     </form>
 
@@ -56,7 +63,7 @@
         const ahora = new Date().toISOString().slice(0, 16);
         document.getElementById('fecha_hora').value = ahora;
     </script>
-
+    <script src="/static/main.js"></script> 
 
 </body>
 </html>

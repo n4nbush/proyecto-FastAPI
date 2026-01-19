@@ -71,6 +71,10 @@ def filtrar(dias=30,categoria_select=None,grupo_select=None):
     listado = procesar_datos(dias)
     total = 0
     resultado=[]
+    if grupo_select == "None":
+        grupo_select = None
+    if categoria_select == "None":
+        categoria_select = None
     for fecha,tipo,grupo,categoria,monto,descripcion in listado:
         if grupo_select is not None and grupo != grupo_select:
             continue
