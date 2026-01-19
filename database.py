@@ -1,13 +1,17 @@
-import sqlite3
+import sqlite3, os
 from contextlib import closing
 from datetime import datetime
 from utils.constant import grupos
+from config import Config
+
 
 DATABASE = 'database/database.db'
 
 
 
 def init_db():
+    os.makedirs(Config.DATABASE_FOLDER, exist_ok=True)
+
     """Crea la tabla si no existe"""
     with closing(get_db()) as db:
         db.execute("""
@@ -20,7 +24,7 @@ def init_db():
             )
         """)
         db.commit()
-
+        
 def get_db():
     """Abre y retorna una conexión"""
     conn = sqlite3.connect(DATABASE)
@@ -49,16 +53,16 @@ def asignar_grupos(categoria):
 
 def procesado_fecha(fecha):
     fecha = fecha.replace("T"," ")
-    dt = datetime.strptime(fecha, "%Y-%m-%d %H:%M")
+    dt = datetime.strptime(fecha, "%Y-%m-%d %H:%M%S")
     
-    fechas = dt.strftime("%d/%m/%Y %H:%M")
+    fechas = dt.strftime("%d/%m/%Y %H:%M%S")
     return(fechas)
 
 def procesar_datos(dias=30):
     listado = traer_datos(dias)
     resultado = []
     for i in listado:
-        fecha = procesado_fecha((i[0]))
+        fecha = i[0]
         tipo = i[1]
         grupo = asignar_grupos(i[2])
         categoria = i[2]
@@ -80,8 +84,5 @@ def filtrar(dias=30,categoria_select=None,grupo_select=None):
             continue
         if categoria_select is not None and categoria != categoria_select:
             continue
-        total += monto
         resultado.append([fecha,tipo,grupo,categoria,monto,descripcion])
     return(resultado,total)
-
-

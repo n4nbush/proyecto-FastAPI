@@ -3,11 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <link rel="stylesheet" href="/static/styles.css">
+    <title>{%block titulo%}{%endblock%}</title>
 </head>
 <body>
+    <button onclick="resumenes()" id="boton_resumenes">Menu▼</button>
+    <div id="menu" class="oculto">
+        <button onclick="window.location.href='/gastos/'">Cargar gasto</button>
+        <button onclick="window.location.href='/gastos/movimientos'">Ver Movimientos</button>
+        <button onclick="window.location.href='/gastos/resumen_grupos'">Resumen por grupos</button>
+        <button>Resumen por categorias</button>
+    </div>
     {%  block body %}
 
     {% endblock %}
+
+    <script src="/static/main.js"></script> 
+
 </body>
 </html>

@@ -1,22 +1,10 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Registro de Gastos</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
+{% extends 'layout.html' %}
 
-    <button onclick="resumenes()" id="boton_resumenes">Menu▼</button>
-    <div id="menu" class="oculto">
-        <button onclick="window.location.href='/gastos/movimientos'">Ver Movimientos</button>
-        <button onclick="window.location.href='/gastos/resumen_grupos'">Resumen por grupos</button>
-        <button>Resumen por grupos</button>
-    </div>
+{%block titulo%}Registrar gasto{%endblock%}
+
+{%  block body %}
 
     <h1>💰 Registrar Movimiento</h1>
-
-    
 
     <form method="POST" action="/gastos/registrar">
         <div class="form-group">
@@ -32,9 +20,7 @@
                 <option value="Tarjeta">Tarjeta</option>
             </select>
         </div>
-
         
-
         <div class="form-group">
             <label for="cateogira">Motivo:</label>
             <select id="categoria" name="categoria" required>
@@ -63,7 +49,4 @@
         const ahora = new Date().toISOString().slice(0, 16);
         document.getElementById('fecha_hora').value = ahora;
     </script>
-    <script src="/static/main.js"></script> 
-
-</body>
-</html>
+{%  endblock %}
