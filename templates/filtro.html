@@ -1,0 +1,29 @@
+<button onclick="toggleFiltros()" id="boton_filtros_avanzados">Filtros Avanzado▼</button>
+    <div id="filtros_avanzados" class="oculto">
+      <form class="form" method="get" style="display: inline;">
+        <label for="miListaDesplegable">Selecciona un periodo:</label>
+        <select name="filtro_fecha" id="filtro_fecha">
+          <option value="30" selected>Seleccione un periodo</option>
+          <option value="1">Dia</option>
+          <option value="7">Semana</option>
+          <option value="30">Mes</option>
+          <option value="60">60 dias</option>
+          <option value="360">Año</option>
+        </select>
+        <label for="miListaDesplegable">Selecciona un grupo:</label>
+        <select name="grupo">
+            <option value=None selected>Seleccione un grupo</option>
+          {%for grupo in grupos%}
+            <option value="{{grupo}}">{{grupo}}</option>
+          {%endfor%}
+        </select> 
+        <label for="miListaDesplegable">Selecciona una categoria:</label>
+        <select name="categoria">
+            <option value=None selected>Seleccione una categoria</option>
+            {% for categoria in categorias %}
+              <option  value="{{categoria}}">{{categoria}}</option>
+            {%endfor%}
+          </select>
+          <button type="submit" style="width: 20%;">Filtrar</button>
+      </form>
+    </div>
