@@ -30,33 +30,32 @@ async def home(request: Request):
 async def registrar(
     fecha_hora : str = Form(...),
     tipo : str = Form(...),
+    metodo_pago: str = Form(...),
     categoria : str = Form(...),
     monto : float = Form(...),
     descripcion : str = Form ("")
     ):
-    movimiento = registrar_gasto(fecha_hora=fecha_hora,tipo=tipo,categoria=categoria,monto=monto,descripcion=descripcion)
+    fecha_hora = database.procesado_fecha(fecha_hora)
+    movimiento = registrar_gasto(fecha_hora=fecha_hora,tipo=tipo,metodo_pago=metodo_pago,categoria=categoria,monto=monto,descripcion=descripcion)
 
     database.init_db()
     with closing(database.get_db()) as db:
         db.execute(
-            "INSERT INTO datos VALUES (?, ?, ?, ?, ?)",
-            (movimiento.fecha_hora, movimiento.tipo, movimiento.categoria, movimiento.monto, movimiento.descripcion)
+            "INSERT INTO datos_crudos VALUES (?, ?, ?, ?, ?, ?)",
+            (movimiento.fecha_hora, movimiento.tipo,movimiento.metodo_pago, movimiento.categoria, movimiento.monto, movimiento.descripcion)
         )
         db.commit()
 
-    print(f"Recibido: {movimiento.fecha_hora}, {movimiento.tipo}, {movimiento.categoria}, {movimiento.monto}, {movimiento.descripcion}")
+    print(f"Recibido: {movimiento.fecha_hora}, {movimiento.tipo},{movimiento.metodo_pago}, {movimiento.categoria}, {movimiento.monto}, {movimiento.descripcion}")
     return RedirectResponse(url="/gastos/", status_code=303)
 
 @router.get("/movimientos", response_class=HTMLResponse)
 async def movimientos(request: Request,filtros: filtrar = Depends()):
-    resultados,total = database.filtrar(
-        filtros.filtro_fecha, 
-        grupo_select=filtros.grupo, 
-        categoria_select=filtros.categoria)
+    resultados = database.obtener_datos("datos_crudos")
 
     return templates.TemplateResponse(
         name="movimientos.html",
-        context={"request":request, "categorias":categorias,"grupos":grupos, "resultados":resultados,"total":total}
+        context={"request":request, "categorias":categorias,"grupos":grupos, "resultados":resultados}
     )
 
 @router.get("/resumen_grupos", response_class=HTMLResponse)

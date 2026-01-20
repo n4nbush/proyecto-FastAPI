@@ -5,7 +5,7 @@ from utils.constant import grupos
 from config import Config
 
 
-DATABASE = 'database/database.db'
+DATABASE = Config.DATABASE
 
 
 
@@ -15,7 +15,7 @@ def init_db():
     """Crea la tabla si no existe"""
     with closing(get_db()) as db:
         db.execute("""
-            CREATE TABLE IF NOT EXISTS datos (
+            CREATE TABLE IF NOT EXISTS datos_crudos (
                 FECHA TEXT,
                 TIPO TEXT,
                 METODO TEXT,
@@ -67,7 +67,8 @@ def asignar_grupos(categoria):
             return(nombre_grupo)
 
 def procesado_fecha(fecha):
-    formatos = ['%Y-%m-%d %H:%M:%S','%d/%m/%Y %H:%M:%S']
+    fecha = fecha.replace("T", " ")
+    formatos = ['%Y-%m-%d %H:%M:%S','%d/%m/%Y %H:%M:%S','%Y-%m-%d %H:%M']
     dt = None
     for formato in formatos:
         try:
@@ -120,13 +121,13 @@ def filtrar(dias=30,categoria_select=None,grupo_select=None):
     return(resultado,total)
 
 
-def resumen_grupos():
-    registro = procesar_datos(360)
+def resumen_grupos(registro):
+    
     init_db()
     for x in registro:
         with closing(get_db()) as db:
             db.execute(
-                "INSERT INTO datos VALUES (?, ?, ?, ?, ?,?)",
+                "INSERT INTO datos_crudos VALUES (?, ?, ?, ?, ?,?)",
                 (x[0], x[1], x[2], x[3], x[4],x[5])
             )
             db.commit()
@@ -143,11 +144,6 @@ def obtener_datos(tabla):
     conn.close()
     return datos
 
-listado = obtener_datos("datos")
+listado = obtener_datos("datos_crudos")
 
-datos_procesados = procesar_datos(listado)
-
-
-
-for x in datos_procesados:
-    print (x)
+    
