@@ -144,6 +144,5 @@ def obtener_datos(tabla):
     conn.close()
     return datos
 
-listado = obtener_datos("datos_crudos")
-
+init_db()
     
